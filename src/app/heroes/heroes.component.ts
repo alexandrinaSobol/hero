@@ -1,7 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { FormsModule } from "@angular/forms";
-import { Hero } from "../hero";
+import { HeroService } from "../hero.service";
 import { HEROES } from "../mock-heroes";
+import { Hero } from '../hero';
 
 @Component({
   selector: "app-heroes",
@@ -9,19 +10,21 @@ import { HEROES } from "../mock-heroes";
   styleUrls: ["./heroes.component.css"]
 })
 export class HeroesComponent implements OnInit {
-  heroes = HEROES;
+ 
+  constructor(private heroService: HeroService) {}
+   selectedHero: Hero;
 
-  selectedHero?: Hero;
+  heroes: Hero[] = [];
+
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
   }
-  constructor() {}
-
-  ngOnInit() {}
+  getHeroes(): void {
+ this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
 }
 
-/*
-Copyright Google LLC. All Rights Reserved.
-Use of this source code is governed by an MIT-style license that
-can be found in the LICENSE file at https://angular.io/license
-*/
+  ngOnInit() {
+    this.getHeroes();
+  }
+}
